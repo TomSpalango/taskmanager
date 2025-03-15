@@ -15,11 +15,25 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    // Handle BOTH "/" and "/tasks"
+    // Handle BOTH "/" and "/tasks" with filtering
     @GetMapping({"/", "/tasks"})
-    public String showTaskList(Model model) {
-        List<Task> tasks = taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
+    public String showTaskList(@RequestParam(value = "filter", required = false) String filter, Model model) {
+        // Always show pending tasks
+        List<Task> pendingTasks = taskService.getAllTasks().stream()
+                .filter(task -> task.getStatus() == Task.Status.Pending)
+                .toList();
+
+        // Show completed tasks only if filter=completed
+        List<Task> completedTasks = taskService.getAllTasks().stream()
+                .filter(task -> task.getStatus() == Task.Status.Completed)
+                .toList();
+
+        boolean showCompleted = "completed".equals(filter);
+
+        model.addAttribute("pendingTasks", pendingTasks);
+        model.addAttribute("completedTasks", completedTasks);
+        model.addAttribute("showCompleted", showCompleted);
+
         return "index";
     }
 
@@ -65,14 +79,5 @@ public class TaskController {
     public String deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return "redirect:/tasks";
-    }
-
-    @GetMapping("/tasks/completed")
-    public String showCompletedTasks(Model model) {
-        List<Task> tasks = taskService.getAllTasks().stream()
-                .filter(task -> task.getStatus() == Task.Status.Completed)
-                .toList();
-        model.addAttribute("tasks", tasks);
-        return "completed-tasks";
     }
 }

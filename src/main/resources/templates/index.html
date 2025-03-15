@@ -3,12 +3,32 @@
 <head>
     <title>Task Manager</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script>
+        function toggleCompletedTasks() {
+            let showCompleted = document.getElementById("showCompleted").value;
+            let url = "/tasks";
+            if (showCompleted === "false") {
+                url += "?filter=completed";
+            }
+            window.location.href = url;
+        }
+    </script>
 </head>
 <body>
 <div class="container mt-4">
     <h2>Task Manager</h2>
     <a href="/tasks/new" class="btn btn-primary mb-3">Add New Task</a>
-    <table class="table">
+
+    <!-- Toggle Completed Tasks Button -->
+    <button class="btn"
+            th:classappend="${showCompleted ? 'btn-warning' : 'btn-secondary'}"
+            onclick="toggleCompletedTasks()">
+        <span th:text="${showCompleted ? 'Hide Completed Tasks' : 'View Completed Tasks'}"></span>
+    </button>
+
+    <input type="hidden" id="showCompleted" th:value="${showCompleted ? 'true' : 'false'}">
+
+    <table class="table mt-3">
         <thead>
             <tr>
                 <th>Title</th>
@@ -19,16 +39,30 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="task : ${tasks}">
+            <!-- Always Show Pending Tasks -->
+            <tr th:each="task : ${pendingTasks}">
                 <td th:text="${task.title}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.dueDate}"></td>
                 <td th:text="${task.status}"></td>
                 <td>
-                    <!-- Mark as Completed button (only if task is still Pending) -->
                     <form th:action="@{/tasks/complete/{id}(id=${task.id})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-success btn-sm" th:if="${task.status == 'Pending'}">Mark as Completed</button>
+                        <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
                     </form>
+                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn btn-warning btn-sm">Edit</a>
+                    <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Show Completed Tasks Only if User Clicks "View Completed Tasks" -->
+            <tr th:each="task : ${showCompleted ? completedTasks : null}">
+                <td th:text="${task.title}"></td>
+                <td th:text="${task.description}"></td>
+                <td th:text="${task.dueDate}"></td>
+                <td th:text="${task.status}"></td>
+                <td>
                     <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn btn-warning btn-sm">Edit</a>
                     <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -37,7 +71,6 @@
             </tr>
         </tbody>
     </table>
-    <a href="/tasks/completed" class="btn btn-secondary">View Completed Tasks</a>
 </div>
 </body>
 </html>
