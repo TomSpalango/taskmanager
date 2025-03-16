@@ -15,16 +15,20 @@
     </script>
 </head>
 <body>
-<div class="container mt-4">
-    <h2>Task Manager</h2>
-    <a href="/tasks/new" class="btn btn-primary mb-3">Add New Task</a>
+	<div class="container mt-4">
+	    <h2>Task Manager</h2>
 
-    <!-- Toggle Completed Tasks Button -->
-    <button class="btn"
-            th:classappend="${showCompleted ? 'btn-warning' : 'btn-secondary'}"
-            onclick="toggleCompletedTasks()">
-        <span th:text="${showCompleted ? 'Hide Completed Tasks' : 'View Completed Tasks'}"></span>
-    </button>
+	    <!-- Flex container for buttons -->
+	    <div class="d-flex justify-content-between align-items-center mb-3">
+	        <a href="/tasks/new" class="btn btn-primary">Add New Task</a>
+
+	        <!-- Toggle Completed Tasks Button -->
+	        <button class="btn"
+	                th:classappend="${showCompleted ? 'btn-warning' : 'btn-secondary'}"
+	                onclick="toggleCompletedTasks()">
+	            <span th:text="${showCompleted ? 'Hide Completed Tasks' : 'View Completed Tasks'}"></span>
+	        </button>
+	    </div>
 
     <input type="hidden" id="showCompleted" th:value="${showCompleted ? 'true' : 'false'}">
 
@@ -46,9 +50,10 @@
                 <td th:text="${task.dueDate}"></td>
                 <td th:text="${task.status}"></td>
                 <td>
-                    <form th:action="@{/tasks/complete/{id}(id=${task.id})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
-                    </form>
+					<form th:action="@{/tasks/complete/{id}(id=${task.id})}" method="post" class="d-inline">
+					    <input type="hidden" name="filter" th:value="${showCompleted ? 'completed' : ''}">
+					    <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
+					</form>
                     <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn btn-warning btn-sm">Edit</a>
                     <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -63,7 +68,8 @@
                 <td th:text="${task.dueDate}"></td>
                 <td th:text="${task.status}"></td>
                 <td>
-                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn btn-warning btn-sm">Edit</a>
+					<a th:href="@{/tasks/edit/{id}(id=${task.id}, filter=${showCompleted ? 'completed' : ''})}" 
+					   class="btn btn-warning btn-sm">Edit</a>
                     <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>

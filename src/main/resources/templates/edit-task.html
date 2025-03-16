@@ -7,30 +7,31 @@
 <body>
 <div class="container mt-4">
     <h2>Edit Task</h2>
-    <form th:action="@{/tasks/edit/{id}(id=${task.id})}" method="post">
-        <input type="hidden" name="id" th:value="${task.id}">
-        <div class="mb-3">
-            <label>Title:</label>
-            <input type="text" class="form-control" name="title" th:value="${task.title}" required>
-        </div>
-        <div class="mb-3">
-            <label>Description:</label>
-            <textarea class="form-control" name="description" th:text="${task.description}" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label>Due Date:</label>
-            <input type="date" class="form-control" name="dueDate" th:value="${task.dueDate}" required>
-        </div>
-		<div class="mb-3">
-		    <label>Status:</label>
-		    <select class="form-control" name="status">
-		        <option value="Pending" th:selected="${task.status.name() == 'Pending'}">Pending</option>
-		        <option value="Completed" th:selected="${task.status.name() == 'Completed'}">Completed</option>
-		    </select>
-		</div>
-        <button type="submit" class="btn btn-success">Update Task</button>
-        <a href="/tasks" class="btn btn-secondary">Cancel</a>
-    </form>
+	<form th:action="@{/tasks/edit/{id}(id=${task.id})}" method="post">
+	    <input type="hidden" name="filter" th:value="${filterCompleted ? 'completed' : ''}">
+	    <input type="hidden" name="id" th:value="${task.id}">
+	    <div class="mb-3">
+	        <label>Title:</label>
+	        <input type="text" class="form-control" name="title" th:value="${task.title}" required>
+	    </div>
+	    <div class="mb-3">
+	        <label>Description:</label>
+	        <textarea class="form-control" name="description" th:text="${task.description}" required></textarea>
+	    </div>
+	    <div class="mb-3">
+	        <label>Due Date:</label>
+	        <input type="date" class="form-control" name="dueDate" th:value="${task.dueDate}" required>
+	    </div>
+	    <div class="mb-3">
+	        <label>Status:</label>
+	        <select class="form-control" name="status">
+	            <option value="Pending" th:selected="${task.status.name() == 'Pending'}">Pending</option>
+	            <option value="Completed" th:selected="${task.status.name() == 'Completed'}">Completed</option>
+	        </select>
+	    </div>
+	    <button type="submit" class="btn btn-success">Update Task</button>
+	    <a href="/tasks" class="btn btn-secondary">Cancel</a>
+	</form>
 </div>
 </body>
 </html>

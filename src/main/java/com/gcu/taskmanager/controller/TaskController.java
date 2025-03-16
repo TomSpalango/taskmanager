@@ -50,29 +50,34 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/edit/{id}")
-    public String showEditTaskForm(@PathVariable Long id, Model model) {
+    public String showEditTaskForm(@PathVariable Long id, 
+                                   @RequestParam(value = "filter", required = false) String filter, 
+                                   Model model) {
         Task task = taskService.getTaskById(id).orElse(null);
         if (task == null) {
-            return "redirect:/tasks";
+            return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
         }
         model.addAttribute("task", task);
+        model.addAttribute("filterCompleted", filter != null);
         return "edit-task";
     }
 
     @PostMapping("/tasks/edit/{id}")
-    public String updateTask(@PathVariable Long id, @ModelAttribute Task updatedTask) {
+    public String updateTask(@PathVariable Long id, 
+                             @ModelAttribute Task updatedTask, 
+                             @RequestParam(value = "filter", required = false) String filter) {
         taskService.updateTask(id, updatedTask);
-        return "redirect:/tasks";
+        return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
     }
 
     @PostMapping("/tasks/complete/{id}")
-    public String markTaskAsCompleted(@PathVariable Long id) {
+    public String markTaskAsCompleted(@PathVariable Long id, @RequestParam(value = "filter", required = false) String filter) {
         Task task = taskService.getTaskById(id).orElse(null);
         if (task != null) {
             task.setStatus(Task.Status.Completed);
             taskService.updateTask(id, task);
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
     }
 
     @PostMapping("/tasks/delete/{id}")
