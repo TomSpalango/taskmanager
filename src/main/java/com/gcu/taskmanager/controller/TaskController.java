@@ -17,7 +17,12 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping
+    @GetMapping("")
+    public String redirectToTasksRoot() {
+        return "redirect:/tasks/";
+    }
+    
+    @GetMapping("/")
     public String index(Model model) {
         List<Task> tasks = taskService.getAllTasks();
         model.addAttribute("tasks", tasks);
