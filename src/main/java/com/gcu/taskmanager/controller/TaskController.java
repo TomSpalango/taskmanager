@@ -68,4 +68,11 @@ public class TaskController {
         taskService.deleteTask(id);
         return "redirect:/tasks";
     }
+
+    @PostMapping("/complete/{id}")
+    public String completeTask(@PathVariable Long id, @RequestParam(value = "filter", required = false) String filter) {
+        taskService.markTaskAsCompleted(id);
+        return "redirect:/tasks" + (filter != null ? "?filter=" + filter : "");
+    }
+
 }

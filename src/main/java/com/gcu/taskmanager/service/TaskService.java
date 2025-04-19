@@ -46,5 +46,14 @@ public class TaskService {
 
     public List<Task> getCompletedTasks() {
         return taskRepository.findByStatus(Task.Status.Completed);
-    }    
+    }
+    
+    public void markTaskAsCompleted(Long id) {
+        Optional<Task> taskOpt = taskRepository.findById(id);
+        taskOpt.ifPresent(task -> {
+            task.setStatus(Task.Status.Completed);
+            taskRepository.save(task);
+        });
+    }
+
 }
