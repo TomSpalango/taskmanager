@@ -23,12 +23,21 @@ public class TaskController {
     }
     
     @GetMapping("/")
-    public String index(Model model) {
-        List<Task> tasks = taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("showCompleted", false);
+    public String index(@RequestParam(value = "filter", required = false) String filter, Model model) {
+        boolean showCompleted = "completed".equalsIgnoreCase(filter);
+
+        List<Task> pendingTasks = taskService.getPendingTasks();
+        model.addAttribute("pendingTasks", pendingTasks);
+
+        if (showCompleted) {
+            List<Task> completedTasks = taskService.getCompletedTasks();
+            model.addAttribute("completedTasks", completedTasks);
+        }
+
+        model.addAttribute("showCompleted", showCompleted);
         return "index";
     }
+
 
     @GetMapping("/new")
     public String showNewTaskForm(Model model) {

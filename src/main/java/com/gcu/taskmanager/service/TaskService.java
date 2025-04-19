@@ -39,4 +39,12 @@ public class TaskService {
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }
+    
+    public List<Task> getPendingTasks() {
+        return taskRepository.findByStatus("Pending");
+    }
+
+    public List<Task> getCompletedTasks() {
+        return taskRepository.findByStatus("Completed");
+    }    
 }
