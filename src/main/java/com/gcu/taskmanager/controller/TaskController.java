@@ -23,7 +23,7 @@ public class TaskController {
         model.addAttribute("showCompleted", showCompleted);
         model.addAttribute("pendingTasks", taskService.getPendingTasks());
         model.addAttribute("completedTasks", showCompleted ? taskService.getCompletedTasks() : null);
-        return "index"; //
+        return "index"; 
     }
 
     @GetMapping("")
