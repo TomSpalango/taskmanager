@@ -62,13 +62,13 @@
             </tr>
 
             <!-- Show Completed Tasks Only if User Clicks "View Completed Tasks" -->
-            <tr th:each="task : ${showCompleted ? completedTasks : null}">
+			<tr th:each="task : ${(showCompleted != null and showCompleted) ? completedTasks : null}">
                 <td th:text="${task.title}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.dueDate}"></td>
                 <td th:text="${task.status}"></td>
                 <td>
-					<a th:href="@{/tasks/edit/{id}(id=${task.id}, filter=${showCompleted ? 'completed' : ''})}" 
+					<a th:href="@{/tasks/edit/{id}(id=${task.id}, filter=${showCompleted != null and showCompleted ? 'completed' : ''})}"
 					   class="btn btn-warning btn-sm">Edit</a>
                     <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
