@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tasks")
 public class TaskApiController {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskApiController.class);
@@ -19,6 +18,7 @@ public class TaskApiController {
     @Autowired
     private TaskService taskService;
 
+    // Get all tasks
     @GetMapping
     public List<Task> getAllTasks() {
         logger.info("TaskApiController.getAllTasks() - Entering");
@@ -27,24 +27,30 @@ public class TaskApiController {
         return tasks;
     }
 
+    // Get a single task by ID
     @GetMapping("/{id}")
     public Optional<Task> getTaskById(@PathVariable Long id) {
         logger.info("TaskApiController.getTaskById() - Entering with id: {}", id);
         return taskService.getTaskById(id);
     }
 
+    // Create a new task using JSON
     @PostMapping
     public Task createTask(@RequestBody Task task) {
         logger.info("TaskApiController.createTask() - Entering with task: {}", task);
         return taskService.createTask(task);
     }
 
+    // Update a task
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
         logger.info("TaskApiController.updateTask() - Entering with id: {}", id);
         return taskService.updateTask(id, task);
+    public Task updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+        return taskService.updateTask(id, updatedTask);
     }
 
+    // Delete a task
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
         logger.info("TaskApiController.deleteTask() - Entering with id: {}", id);

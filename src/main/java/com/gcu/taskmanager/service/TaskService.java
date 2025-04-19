@@ -23,17 +23,18 @@ public class TaskService {
         List<Task> tasks = taskRepository.findAll();
         logger.info("TaskService.getAllTasks() - Exiting with {} tasks", tasks.size());
         return tasks;
+        return taskRepository.findAll();
     }
 
     public Optional<Task> getTaskById(Long id) {
         logger.info("TaskService.getTaskById() - Entering with id: {}", id);
-        Optional<Task> task = taskRepository.findById(id);
         if (task.isPresent()) {
             logger.info("TaskService.getTaskById() - Task found");
         } else {
             logger.warn("TaskService.getTaskById() - No task found with id: {}", id);
         }
         return task;
+        return taskRepository.findById(id);
     }
 
     public Task createTask(Task task) {
@@ -41,6 +42,7 @@ public class TaskService {
         Task savedTask = taskRepository.save(task);
         logger.info("TaskService.createTask() - Task saved with id: {}", savedTask.getId());
         return savedTask;
+        return taskRepository.save(task);
     }
 
     public Task updateTask(Long id, Task updatedTask) {
@@ -57,6 +59,8 @@ public class TaskService {
             logger.warn("TaskService.updateTask() - No task found with id: {}", id);
             return null;
         });
+            return taskRepository.save(task);
+        }).orElse(null);
     }
 
     public void deleteTask(Long id) {
