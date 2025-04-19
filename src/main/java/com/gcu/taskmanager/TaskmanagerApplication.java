@@ -11,17 +11,13 @@ public class TaskmanagerApplication {
 	private static final Logger logger = LoggerFactory.getLogger(TaskmanagerApplication.class);
 
 	public static void main(String[] args) {
-<<<<<<< HEAD
 	    String port = System.getenv("PORT");
 	    if (port != null) {
 	        System.getProperties().put("server.port", port);
 	    }
 	    logger.info("TaskmanagerApplication.main() - Application starting");
         SpringApplication.run(TaskmanagerApplication.class, args);
-        logger.info("TaskmanagerApplication.main() - Application started successfully");	}
-=======
-		SpringApplication.run(TaskmanagerApplication.class, args);
+        logger.info("TaskmanagerApplication.main() - Application started successfully");
 	}
->>>>>>> parent of e57de94 (Fix: use Heroku dynamic port)
 
 }
