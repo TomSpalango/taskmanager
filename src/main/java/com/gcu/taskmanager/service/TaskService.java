@@ -41,10 +41,10 @@ public class TaskService {
     }
     
     public List<Task> getPendingTasks() {
-        return taskRepository.findByStatus("Pending");
+        return taskRepository.findByStatus(Task.Status.Pending);
     }
 
     public List<Task> getCompletedTasks() {
-        return taskRepository.findByStatus("Completed");
+        return taskRepository.findByStatus(Task.Status.Completed);
     }    
 }
