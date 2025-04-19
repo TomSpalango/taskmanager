@@ -21,6 +21,7 @@ public class TaskController {
     public String index(Model model) {
         List<Task> tasks = taskService.getAllTasks();
         model.addAttribute("tasks", tasks);
+        model.addAttribute("showCompleted", false);
         return "index";
     }
 
