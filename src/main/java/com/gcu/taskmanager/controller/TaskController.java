@@ -48,7 +48,7 @@ public class TaskController {
     @PostMapping("/save")
     public String saveTask(@ModelAttribute Task task) {
         taskService.createTask(task);
-        return "redirect:/tasks";
+        return "redirect:/tasks?filter=completed";
     }
 
     @GetMapping("/edit/{id}")
@@ -58,19 +58,19 @@ public class TaskController {
             model.addAttribute("task", taskOptional.get());
             return "edit-task";
         } else {
-            return "redirect:/tasks";
+            return "redirect:/tasks?filter=completed";
         }
     }
 
     @PostMapping("/update")
     public String updateTask(@ModelAttribute Task task) {
         taskService.updateTask(task.getId(), task);
-        return "redirect:/tasks";
+        return "redirect:/tasks?filter=completed";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable("id") Long id) {
         taskService.deleteTask(id);
-        return "redirect:/tasks";
+        return "redirect:/tasks?filter=completed";
     }
 }
