@@ -6,83 +6,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class TaskController {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
     @Autowired
     private TaskService taskService;
 
-    // Handle BOTH "/" and "/tasks" with filtering
-    @GetMapping({"/", "/tasks"})
-    public String showTaskList(@RequestParam(value = "filter", required = false) String filter, Model model) {
-        // Always show pending tasks
-        List<Task> pendingTasks = taskService.getAllTasks().stream()
-                .filter(task -> task.getStatus() == Task.Status.Pending)
-                .toList();
-
-        // Show completed tasks only if filter=completed
-        List<Task> completedTasks = taskService.getAllTasks().stream()
-                .filter(task -> task.getStatus() == Task.Status.Completed)
-                .toList();
-
-        boolean showCompleted = "completed".equals(filter);
-
-        model.addAttribute("pendingTasks", pendingTasks);
-        model.addAttribute("completedTasks", completedTasks);
-        model.addAttribute("showCompleted", showCompleted);
-
+    @GetMapping("/")
+    public String index(Model model) {
+        logger.info("TaskController.index() - Loading task list");
+        model.addAttribute("tasks", taskService.getAllTasks());
         return "index";
     }
 
     @GetMapping("/tasks/new")
-    public String showNewTaskForm(Model model) {
+    public String newTaskForm(Model model) {
+        logger.info("TaskController.newTaskForm() - Loading form to create task");
         model.addAttribute("task", new Task());
         return "new-task";
     }
 
-    @PostMapping("/tasks/new")
-    public String saveNewTask(@ModelAttribute Task task) {
+    @PostMapping("/tasks")
+    public String createTask(@ModelAttribute Task task) {
+        logger.info("TaskController.createTask() - Creating task: {}", task);
         taskService.createTask(task);
-        return "redirect:/tasks";
+        return "redirect:/";
     }
 
     @GetMapping("/tasks/edit/{id}")
-    public String showEditTaskForm(@PathVariable Long id, 
-                                   @RequestParam(value = "filter", required = false) String filter, 
-                                   Model model) {
-        Task task = taskService.getTaskById(id).orElse(null);
-        if (task == null) {
-            return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
-        }
-        model.addAttribute("task", task);
-        model.addAttribute("filterCompleted", filter != null);
-        return "edit-task";
+    public String editTaskForm(@PathVariable Long id, Model model) {
+        logger.info("TaskController.editTaskForm() - Editing task with id: {}", id);
+        return taskService.getTaskById(id)
+                .map(task -> {
+                    model.addAttribute("task", task);
+                    return "edit-task";
+                })
+                .orElse("redirect:/");
     }
 
-    @PostMapping("/tasks/edit/{id}")
-    public String updateTask(@PathVariable Long id, 
-                             @ModelAttribute Task updatedTask, 
-                             @RequestParam(value = "filter", required = false) String filter) {
-        taskService.updateTask(id, updatedTask);
-        return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
+    @PostMapping("/tasks/update/{id}")
+    public String updateTask(@PathVariable Long id, @ModelAttribute Task task) {
+        logger.info("TaskController.updateTask() - Updating task with id: {}", id);
+        taskService.updateTask(id, task);
+        return "redirect:/";
     }
 
-    @PostMapping("/tasks/complete/{id}")
-    public String markTaskAsCompleted(@PathVariable Long id, @RequestParam(value = "filter", required = false) String filter) {
-        Task task = taskService.getTaskById(id).orElse(null);
-        if (task != null) {
-            task.setStatus(Task.Status.Completed);
-            taskService.updateTask(id, task);
-        }
-        return "redirect:/tasks" + (filter != null ? "?filter=completed" : "");
-    }
-
-    @PostMapping("/tasks/delete/{id}")
+    @GetMapping("/tasks/delete/{id}")
     public String deleteTask(@PathVariable Long id) {
+        logger.info("TaskController.deleteTask() - Deleting task with id: {}", id);
         taskService.deleteTask(id);
-        return "redirect:/tasks";
+        return "redirect:/";
     }
 }
