@@ -18,5 +18,7 @@ public class TaskmanagerApplication {
 	    logger.info("TaskmanagerApplication.main() - Application starting");
         SpringApplication.run(TaskmanagerApplication.class, args);
         logger.info("TaskmanagerApplication.main() - Application started successfully");	}
+		SpringApplication.run(TaskmanagerApplication.class, args);
+	}
 
 }
