@@ -30,7 +30,7 @@
 	        </button>
 	    </div>
 
-    <input type="hidden" id="showCompleted" th:value="${showCompleted ? 'true' : 'false'}">
+	<input type="hidden" id="showCompleted" th:value="${showCompleted != null and showCompleted ? 'true' : 'false'}">
 
     <table class="table mt-3">
         <thead>
