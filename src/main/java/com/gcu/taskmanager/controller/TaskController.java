@@ -18,9 +18,12 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/")
-    public String index(Model model) {
-        logger.info("TaskController.index() - Loading task list");
+    public String index(@RequestParam(name = "showCompleted", required = false, defaultValue = "false") boolean showCompleted, Model model) {
+        logger.info("TaskController.index() - showCompleted: {}", showCompleted);
+
+        model.addAttribute("showCompleted", showCompleted);
         model.addAttribute("tasks", taskService.getAllTasks());
+
         return "index";
     }
 
