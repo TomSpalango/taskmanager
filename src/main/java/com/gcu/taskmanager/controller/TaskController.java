@@ -26,7 +26,13 @@ public class TaskController {
         return "index"; //
     }
 
-
+    @GetMapping("")
+    public String redirectToTasksRoot(@RequestParam(value = "filter", required = false) String filter) {
+        if ("completed".equalsIgnoreCase(filter)) {
+            return "redirect:/tasks/?filter=completed";
+        }
+        return "redirect:/tasks/";
+    }
 
     @GetMapping("/new")
     public String showNewTaskForm(Model model) {
