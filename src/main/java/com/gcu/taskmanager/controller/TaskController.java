@@ -19,7 +19,7 @@ public class TaskController {
 
     @GetMapping("")
     public String redirectToTasksRoot() {
-        return "redirect:/tasks/";
+        return "redirect:/tasks?filter=completed";
     }
     
     @GetMapping("/")
