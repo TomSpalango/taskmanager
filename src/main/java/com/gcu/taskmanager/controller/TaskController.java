@@ -19,24 +19,18 @@ public class TaskController {
 
     @GetMapping("")
     public String redirectToTasksRoot() {
-        return "redirect:/tasks?filter=completed";
+        return "redirect:/tasks";
     }
     
     @GetMapping("/")
     public String index(@RequestParam(value = "filter", required = false) String filter, Model model) {
         boolean showCompleted = "completed".equalsIgnoreCase(filter);
-
-        List<Task> pendingTasks = taskService.getPendingTasks();
-        model.addAttribute("pendingTasks", pendingTasks);
-
-        if (showCompleted) {
-            List<Task> completedTasks = taskService.getCompletedTasks();
-            model.addAttribute("completedTasks", completedTasks);
-        }
-
         model.addAttribute("showCompleted", showCompleted);
-        return "index";
+        model.addAttribute("pendingTasks", taskService.getPendingTasks());
+        model.addAttribute("completedTasks", showCompleted ? taskService.getCompletedTasks() : null);
+        return "index"; //
     }
+
 
 
     @GetMapping("/new")
@@ -48,7 +42,7 @@ public class TaskController {
     @PostMapping("/save")
     public String saveTask(@ModelAttribute Task task) {
         taskService.createTask(task);
-        return "redirect:/tasks?filter=completed";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/edit/{id}")
@@ -58,19 +52,19 @@ public class TaskController {
             model.addAttribute("task", taskOptional.get());
             return "edit-task";
         } else {
-            return "redirect:/tasks?filter=completed";
+            return "redirect:/tasks";
         }
     }
 
     @PostMapping("/update")
     public String updateTask(@ModelAttribute Task task) {
         taskService.updateTask(task.getId(), task);
-        return "redirect:/tasks?filter=completed";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable("id") Long id) {
         taskService.deleteTask(id);
-        return "redirect:/tasks?filter=completed";
+        return "redirect:/tasks";
     }
 }
