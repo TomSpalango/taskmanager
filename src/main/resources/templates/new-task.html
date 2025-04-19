@@ -7,7 +7,7 @@
 <body>
 <div class="container mt-4">
     <h2>Create New Task</h2>
-	<form th:action="@{/tasks/save}" th:object="${task}" method="post">
+	<form th:action="@{/tasks/save}" method="post">
 	    <div class="mb-3">
 	        <label>Title:</label>
 	        <input type="text" class="form-control" name="title" required>
@@ -20,8 +20,8 @@
 	        <label>Due Date:</label>
 	        <input type="date" class="form-control" name="dueDate" required>
 	    </div>
-	    <!-- ✅ Hidden input to set the default status to Pending -->
-	    <input type="hidden" name="status" value="Pending">
+
+			    <input type="hidden" name="status" value="Pending">
 	    <button type="submit" class="btn btn-success">Save Task</button>
 	    <a href="/tasks" class="btn btn-secondary">Cancel</a>
 	</form>
