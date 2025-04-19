@@ -24,9 +24,9 @@
 
 	        <!-- Toggle Completed Tasks Button -->
 	        <button class="btn"
-	                th:classappend="${showCompleted ? 'btn-warning' : 'btn-secondary'}"
+	                <th:classappend="${showCompleted != null and showCompleted ? 'btn-warning' : 'btn-secondary'}"
 	                onclick="toggleCompletedTasks()">
-	            <span th:text="${showCompleted ? 'Hide Completed Tasks' : 'View Completed Tasks'}"></span>
+					<span th:text="${showCompleted != null and showCompleted ? 'Hide Completed Tasks' : 'View Completed Tasks'}"></span>
 	        </button>
 	    </div>
 
