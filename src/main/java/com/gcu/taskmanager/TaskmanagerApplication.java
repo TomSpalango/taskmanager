@@ -11,13 +11,7 @@ public class TaskmanagerApplication {
 	    if (port != null) {
 	        System.getProperties().put("server.port", port);
 	    }
-<<<<<<< HEAD
-	    logger.info("TaskmanagerApplication.main() - Application starting");
         SpringApplication.run(TaskmanagerApplication.class, args);
-        logger.info("TaskmanagerApplication.main() - Application started successfully");
-=======
-		SpringApplication.run(TaskmanagerApplication.class, args);
->>>>>>> parent of f36aa8c (Added basic logging)
 	}
 
 }
