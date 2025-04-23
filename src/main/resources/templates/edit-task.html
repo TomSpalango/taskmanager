@@ -7,7 +7,7 @@
 <body>
 <div class="container mt-4">
     <h2>Edit Task</h2>
-	<form th:action="@{/tasks/edit/{id}(id=${task.id})}" method="post">
+	<form th:action="@{/tasks/update}" method="post">
 		<input type="hidden" name="filter" th:value="${filterCompleted != null and filterCompleted ? 'completed' : ''}" />
 	    <input type="hidden" name="id" th:value="${task.id}">
 	    <div class="mb-3">
