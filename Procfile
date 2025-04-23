@@ -1,1 +1,1 @@
-web: java -jar target/taskmanager-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=5000 -jar application.jar
