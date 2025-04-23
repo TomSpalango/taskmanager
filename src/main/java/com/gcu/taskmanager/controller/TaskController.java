@@ -10,16 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @GetMapping("/")
     public String index(@RequestParam(value = "filter", required = false) String filter, Model model) {
-        boolean showCompleted = "completed".equalsIgnoreCase(filter);
+    	logger.info("Accessed index page with filter: {}", filter);        
+    	boolean showCompleted = "completed".equalsIgnoreCase(filter);
         model.addAttribute("showCompleted", showCompleted);
         model.addAttribute("pendingTasks", taskService.getPendingTasks());
         model.addAttribute("completedTasks", showCompleted ? taskService.getCompletedTasks() : null);

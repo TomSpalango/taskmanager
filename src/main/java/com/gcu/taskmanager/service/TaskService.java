@@ -1,7 +1,11 @@
 package com.gcu.taskmanager.service;
 
+import com.gcu.taskmanager.controller.TaskController;
 import com.gcu.taskmanager.models.Task;
 import com.gcu.taskmanager.repository.TaskRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,7 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
@@ -23,10 +28,12 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
+    	logger.info("Creating task: {}", task);        
         return taskRepository.save(task);
     }
 
     public Task updateTask(Long id, Task updatedTask) {
+    	logger.info("Updating task: {}", updatedTask);        
         return taskRepository.findById(id).map(task -> {
             task.setTitle(updatedTask.getTitle());
             task.setDescription(updatedTask.getDescription());
@@ -37,14 +44,17 @@ public class TaskService {
     }
 
     public void deleteTask(Long id) {
+    	logger.info("Deleting task with ID: {}", id);        
         taskRepository.deleteById(id);
     }
     
     public List<Task> getPendingTasks() {
+    	logger.info("Getting pending tasks");        
         return taskRepository.findByStatus(Task.Status.Pending);
     }
 
     public List<Task> getCompletedTasks() {
+    	logger.info("Getting completed tasks");        
         return taskRepository.findByStatus(Task.Status.Completed);
     }
     
